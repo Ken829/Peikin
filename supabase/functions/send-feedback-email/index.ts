@@ -76,13 +76,7 @@ Deno.serve(async (req: Request) => {
     console.log("Gmail credentials found, attempting to send email...");
 
     try {
-      const emailBody = `From: ${GMAIL_USER}
-To: peikinginseng@gmail.com
-Subject: New Feedback from ${name}
-Content-Type: text/html; charset=utf-8
-MIME-Version: 1.0
-
-<!DOCTYPE html>
+      const htmlContent = `<!DOCTYPE html>
 <html>
   <head>
     <style>
@@ -132,36 +126,105 @@ MIME-Version: 1.0
   </body>
 </html>`;
 
-      console.log("Connecting to Gmail SMTP...");
+      console.log("Connecting to Gmail SMTP server...");
 
-      const base64Body = btoa(unescape(encodeURIComponent(emailBody)))
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
+      const conn = await Deno.connect({
+        hostname: "smtp.gmail.com",
+        port: 587,
+        transport: "tcp",
+      });
 
-      const emailResponse = await fetch(
-        `https://gmail.googleapis.com/gmail/v1/users/me/messages/send`,
-        {
-          method: "POST",
-          headers: {
-            "Authorization": `Basic ${btoa(`${GMAIL_USER}:${GMAIL_APP_PASSWORD}`)}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            raw: base64Body,
-          }),
+      const reader = conn.readable.getReader();
+      const writer = conn.writable.getWriter();
+      const decoder = new TextDecoder();
+      const encoder = new TextEncoder();
+
+      const readLine = async () => {
+        const { value } = await reader.read();
+        const response = decoder.decode(value);
+        console.log("SMTP:", response);
+        return response;
+      };
+
+      const writeLine = async (line: string) => {
+        console.log("Sending:", line);
+        await writer.write(encoder.encode(line + "\r\n"));
+      };
+
+      await readLine();
+      await writeLine("EHLO localhost");
+      await readLine();
+
+      await writeLine("STARTTLS");
+      const tlsResponse = await readLine();
+
+      if (tlsResponse.startsWith("220")) {
+        const tlsConn = await Deno.startTls(conn, { hostname: "smtp.gmail.com" });
+        const tlsReader = tlsConn.readable.getReader();
+        const tlsWriter = tlsConn.writable.getWriter();
+
+        const tlsReadLine = async () => {
+          const { value } = await tlsReader.read();
+          const response = decoder.decode(value);
+          console.log("SMTP (TLS):", response);
+          return response;
+        };
+
+        const tlsWriteLine = async (line: string) => {
+          console.log("Sending (TLS):", line);
+          await tlsWriter.write(encoder.encode(line + "\r\n"));
+        };
+
+        await tlsWriteLine("EHLO localhost");
+        await tlsReadLine();
+
+        await tlsWriteLine("AUTH LOGIN");
+        await tlsReadLine();
+
+        await tlsWriteLine(btoa(GMAIL_USER));
+        await tlsReadLine();
+
+        await tlsWriteLine(btoa(GMAIL_APP_PASSWORD));
+        const authResponse = await tlsReadLine();
+
+        if (authResponse.startsWith("235")) {
+          await tlsWriteLine(`MAIL FROM:<${GMAIL_USER}>`);
+          await tlsReadLine();
+
+          await tlsWriteLine(`RCPT TO:<peikinginseng@gmail.com>`);
+          await tlsReadLine();
+
+          await tlsWriteLine("DATA");
+          await tlsReadLine();
+
+          const emailContent = `From: ${GMAIL_USER}
+To: peikinginseng@gmail.com
+Subject: New Feedback from ${name}
+Content-Type: text/html; charset=utf-8
+MIME-Version: 1.0
+
+${htmlContent}`;
+
+          await tlsWriteLine(emailContent);
+          await tlsWriteLine(".");
+          const sendResponse = await tlsReadLine();
+
+          if (sendResponse.startsWith("250")) {
+            console.log("Email sent successfully!");
+          } else {
+            console.error("Failed to send email:", sendResponse);
+          }
+
+          await tlsWriteLine("QUIT");
+          await tlsReadLine();
+        } else {
+          console.error("Authentication failed:", authResponse);
         }
-      );
 
-      const responseText = await emailResponse.text();
-      console.log("Gmail API response status:", emailResponse.status);
-      console.log("Gmail API response:", responseText);
-
-      if (!emailResponse.ok) {
-        console.error("Email sending failed with status:", emailResponse.status);
-        console.error("Error details:", responseText);
+        tlsConn.close();
       } else {
-        console.log("Email sent successfully to peikinginseng@gmail.com");
+        console.error("STARTTLS failed:", tlsResponse);
+        conn.close();
       }
     } catch (emailError) {
       console.error("Email sending error (non-critical):", emailError);
