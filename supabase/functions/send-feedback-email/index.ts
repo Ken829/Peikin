@@ -76,7 +76,7 @@ Deno.serve(async (req: Request) => {
           "Authorization": `Bearer ${RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-          from: "Pei Kin Feedback <feedback@peikinginseng.com>",
+          from: "Pei Kin Feedback <onboarding@resend.dev>",
           to: ["peikingensing@gmail.com"],
           reply_to: email,
           subject: `New Feedback from ${name}`,
