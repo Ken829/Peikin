@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pei-kin-ginseng-hall.netlify.app/sitemap.xml
