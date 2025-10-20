@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/Pekin/',  // Match the repo path for GitHub Pages default URL
+  base: '/',  // Match the repo path for GitHub Pages default URL
   optimizeDeps: {
     exclude: ['lucid-react'],
   },
