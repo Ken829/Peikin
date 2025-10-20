@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
+import Admin from './pages/Admin';
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -26,6 +27,8 @@ function AppContent() {
         return <Services />;
       case 'contact':
         return <Contact />;
+      case 'admin':
+        return <Admin />;
       default:
         return <Home onNavigate={handleNavigate} />;
     }
