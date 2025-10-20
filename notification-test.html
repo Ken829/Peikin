@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notification Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: linear-gradient(to br, #fef3c7, #fed7aa);
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #92400e;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #d97706;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 5px 10px 0;
+    }
+    button:hover {
+      background: #b45309;
+    }
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fef3c7;
+      border-radius: 8px;
+      border-left: 4px solid #d97706;
+    }
+    .info {
+      background: #dbeafe;
+      border-left-color: #3b82f6;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Browser Notification Test</h1>
+
+    <div class="info">
+      <strong>Instructions:</strong>
+      <ol>
+        <li>Click "Request Permission" below</li>
+        <li>Click "Allow" when your browser asks</li>
+        <li>Click "Send Test Notification" to see how it looks</li>
+      </ol>
+    </div>
+
+    <button onclick="requestPermission()">Request Permission</button>
+    <button onclick="sendTestNotification()">Send Test Notification</button>
+
+    <div id="status" class="status"></div>
+  </div>
+
+  <script>
+    function updateStatus(message, isError = false) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.textContent = message;
+      statusDiv.style.borderLeftColor = isError ? '#ef4444' : '#d97706';
+      statusDiv.style.background = isError ? '#fee2e2' : '#fef3c7';
+    }
+
+    function requestPermission() {
+      if (!('Notification' in window)) {
+        updateStatus('❌ This browser does not support notifications', true);
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        updateStatus('✅ Notifications are already enabled!');
+        return;
+      }
+
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          updateStatus('✅ Notifications enabled successfully!');
+          sendTestNotification();
+        } else {
+          updateStatus('❌ Notification permission denied', true);
+        }
+      });
+    }
+
+    function sendTestNotification() {
+      if (!('Notification' in window)) {
+        updateStatus('❌ This browser does not support notifications', true);
+        return;
+      }
+
+      if (Notification.permission !== 'granted') {
+        updateStatus('⚠️ Please enable notifications first!', true);
+        return;
+      }
+
+      const notification = new Notification('Test Notification', {
+        body: 'This is how customer feedback notifications will look!',
+        icon: '/peikin_logo_refined_letters_smooth.png',
+        requireInteraction: true,
+      });
+
+      notification.onclick = () => {
+        updateStatus('✅ Notification clicked!');
+        notification.close();
+      };
+
+      updateStatus('✅ Test notification sent! Check your screen.');
+    }
+
+    window.onload = () => {
+      if ('Notification' in window) {
+        updateStatus(`Current permission: ${Notification.permission}`);
+      } else {
+        updateStatus('❌ This browser does not support notifications', true);
+      }
+    };
+  </script>
+</body>
+</html>

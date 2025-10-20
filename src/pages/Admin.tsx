@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Mail, Phone, Calendar, CheckCircle, Circle, RefreshCw } from 'lucide-react';
+import { Mail, Phone, Calendar, CheckCircle, Circle, RefreshCw, Bell, BellOff } from 'lucide-react';
 
 interface Feedback {
   id: string;
@@ -18,8 +18,57 @@ export default function Admin() {
   const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
   const ADMIN_PASSWORD = 'peikin2025';
+
+  const requestNotificationPermission = async () => {
+    if (!('Notification' in window)) {
+      alert('This browser does not support notifications');
+      return false;
+    }
+
+    if (Notification.permission === 'granted') {
+      setNotificationsEnabled(true);
+      localStorage.setItem('notifications_enabled', 'true');
+      return true;
+    }
+
+    if (Notification.permission !== 'denied') {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        setNotificationsEnabled(true);
+        localStorage.setItem('notifications_enabled', 'true');
+        new Notification('Notifications Enabled!', {
+          body: 'You will now receive alerts for new feedback',
+          icon: '/peikin_logo_refined_letters_smooth.png',
+        });
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const disableNotifications = () => {
+    setNotificationsEnabled(false);
+    localStorage.setItem('notifications_enabled', 'false');
+  };
+
+  const showNotification = (feedback: Feedback) => {
+    if (notificationsEnabled && Notification.permission === 'granted') {
+      const notification = new Notification('New Customer Feedback!', {
+        body: `${feedback.name}: ${feedback.message.substring(0, 100)}...`,
+        icon: '/peikin_logo_refined_letters_smooth.png',
+        tag: feedback.id,
+        requireInteraction: true,
+      });
+
+      notification.onclick = () => {
+        window.focus();
+        notification.close();
+      };
+    }
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,16 +82,43 @@ export default function Admin() {
 
   useEffect(() => {
     const auth = localStorage.getItem('admin_auth');
+    const notifEnabled = localStorage.getItem('notifications_enabled') === 'true';
+
     if (auth === 'true') {
       setIsAuthenticated(true);
+    }
+
+    if (notifEnabled && Notification.permission === 'granted') {
+      setNotificationsEnabled(true);
     }
   }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
       loadFeedback();
+
+      const channel = supabase
+        .channel('feedback-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'feedback',
+          },
+          (payload) => {
+            const newFeedback = payload.new as Feedback;
+            showNotification(newFeedback);
+            loadFeedback();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, notificationsEnabled]);
 
   const loadFeedback = async () => {
     setLoading(true);
@@ -117,6 +193,25 @@ export default function Admin() {
               </p>
             </div>
             <div className="flex gap-2">
+              {notificationsEnabled ? (
+                <button
+                  onClick={disableNotifications}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  title="Notifications are ON"
+                >
+                  <Bell className="h-4 w-4" />
+                  Notifications ON
+                </button>
+              ) : (
+                <button
+                  onClick={requestNotificationPermission}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-colors"
+                  title="Enable notifications"
+                >
+                  <BellOff className="h-4 w-4" />
+                  Enable Notifications
+                </button>
+              )}
               <button
                 onClick={loadFeedback}
                 className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
