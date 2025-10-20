@@ -77,7 +77,7 @@ Deno.serve(async (req: Request) => {
         },
         body: JSON.stringify({
           from: "Pei Kin Feedback <onboarding@resend.dev>",
-          to: ["peikingensing@gmail.com"],
+          to: ["peikinginseng@gmail.com"],
           reply_to: email,
           subject: `New Feedback from ${name}`,
           html: `
@@ -138,7 +138,7 @@ Deno.serve(async (req: Request) => {
         const error = await emailResponse.text();
         console.error("Email sending failed:", error);
       } else {
-        console.log("Email sent successfully to peikingensing@gmail.com");
+        console.log("Email sent successfully to peikinginseng@gmail.com");
       }
     } catch (emailError) {
       console.error("Email sending error (non-critical):", emailError);
