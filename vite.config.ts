@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Peikin/',  // Match the repo name for the default GitHub Pages URL
+  base: '/',  // Root path for custom domain
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
