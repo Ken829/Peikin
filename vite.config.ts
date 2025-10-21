@@ -1,17 +1,26 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { copyFileSync } from 'fs'
 
 export default defineConfig({
-  plugins: [react()],
-  base: '/',  // Root for production/custom domain
+  plugins: [
+    react(),
+    {
+      name: 'copy-cname',
+      closeBundle() {
+        copyFileSync('CNAME', 'dist/CNAME')
+      }
+    }
+  ],
+  base: '/',
   publicDir: 'public',
   build: {
     outDir: 'dist',
-    assetsDir: '',  // Assets in root
+    assetsDir: '',
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks: undefined,  // Avoid chunking issues
+        manualChunks: undefined,
       },
     },
   },
