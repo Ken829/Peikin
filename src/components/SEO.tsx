@@ -20,6 +20,10 @@ export default function SEO({ title, description, page = 'home' }: SEOProps) {
         title: '北京中医诊所 - 居銮传统中医药 | Pei Kin Ginseng Hall',
         description: '自1999年以来为居銮提供专业中医服务。注册中医师提供针灸、中药、推拿按摩等全面中医治疗。',
       },
+      ms: {
+        title: 'Pei Kin Ginseng Hall - Perubatan Tradisional Cina di Kluang, Johor',
+        description: 'Klinik Perubatan Tradisional Cina pakar di Kluang sejak 1999. Pakar TCM berlesen menawarkan akupunktur, ubat herba, urutan tuina, dan rawatan holistik.',
+      },
     },
     about: {
       en: {
@@ -29,6 +33,10 @@ export default function SEO({ title, description, page = 'home' }: SEOProps) {
       zh: {
         title: '关于我们 - 北京中医诊所 | 专业中医团队',
         description: '了解我们经验丰富的中医师团队和自1999年以来对传统中医药的专业承诺。',
+      },
+      ms: {
+        title: 'Tentang Kami - Pei Kin Ginseng Hall | Pakar TCM Berpengalaman',
+        description: 'Ketahui tentang pakar TCM berpengalaman kami dan komitmen kami terhadap kecemerlangan perubatan tradisional Cina di Kluang sejak 1999.',
       },
     },
     services: {
@@ -40,6 +48,10 @@ export default function SEO({ title, description, page = 'home' }: SEOProps) {
         title: '中医服务 - 针灸、中药、推拿 | 北京中医诊所',
         description: '全面的中医服务包括针灸、中草药、推拿按摩、拔罐和个性化治疗方案。',
       },
+      ms: {
+        title: 'Perkhidmatan TCM - Akupunktur, Ubat Herba, Tuina | Pei Kin Ginseng Hall',
+        description: 'Perkhidmatan Perubatan Tradisional Cina komprehensif termasuk akupunktur, ubat herba, urutan tuina, bekam, dan pelan rawatan tersuai.',
+      },
     },
     contact: {
       en: {
@@ -49,6 +61,10 @@ export default function SEO({ title, description, page = 'home' }: SEOProps) {
       zh: {
         title: '联系我们 - 预约咨询 | 北京中医诊所居銮',
         description: '预约您的中医咨询。营业时间：周一至周六 9:30am-5pm，周日 9:30am-4pm。地址：509 Jalan Mersing, Kluang Baru。',
+      },
+      ms: {
+        title: 'Hubungi Kami - Tempah Temujanji | Pei Kin Ginseng Hall Kluang',
+        description: 'Jadualkan perundingan TCM anda di Kluang. Buka Isnin-Sabtu 9:30am-5pm, Ahad 9:30am-4pm. Lawati kami di 509 Jalan Mersing, Kluang Baru.',
       },
     },
   };
@@ -125,6 +141,8 @@ export default function SEO({ title, description, page = 'home' }: SEOProps) {
       alternateName: 'Pei Kin Ginseng Hall - 北京中医诊所',
       description: language === 'zh'
         ? '提供专业的传统中医服务，包括针灸、中药、推拿按摩等治疗'
+        : language === 'ms'
+        ? 'Klinik Perubatan Tradisional Cina profesional menawarkan akupunktur, ubat herba, dan rawatan holistik'
         : 'Professional Traditional Chinese Medicine clinic offering acupuncture, herbal medicine, and holistic treatments',
       url: window.location.origin,
       telephone: '+60-7-771-5018',
@@ -167,19 +185,19 @@ export default function SEO({ title, description, page = 'home' }: SEOProps) {
       availableService: [
         {
           '@type': 'MedicalTherapy',
-          name: language === 'zh' ? '针灸治疗' : 'Acupuncture Therapy',
+          name: language === 'zh' ? '针灸治疗' : language === 'ms' ? 'Terapi Akupunktur' : 'Acupuncture Therapy',
         },
         {
           '@type': 'MedicalTherapy',
-          name: language === 'zh' ? '中药配方' : 'Herbal Medicine',
+          name: language === 'zh' ? '中药配方' : language === 'ms' ? 'Ubat Herba' : 'Herbal Medicine',
         },
         {
           '@type': 'MedicalTherapy',
-          name: language === 'zh' ? '推拿按摩' : 'Tuina Massage',
+          name: language === 'zh' ? '推拿按摩' : language === 'ms' ? 'Urutan Tuina' : 'Tuina Massage',
         },
         {
           '@type': 'MedicalTherapy',
-          name: language === 'zh' ? '拔罐疗法' : 'Cupping Therapy',
+          name: language === 'zh' ? '拔罐疗法' : language === 'ms' ? 'Terapi Bekam' : 'Cupping Therapy',
         },
       ],
       aggregateRating: {
