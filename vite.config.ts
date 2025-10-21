@@ -3,13 +3,12 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',  // Root for custom domain
-  publicDir: 'public',  // Ensure public assets are copied
+  base: process.env.NODE_ENV === 'production' ? '/' : '/Peikin/',  // '/Peikin/' for dev/default URL, '/' for production/custom domain
+  publicDir: 'public',
   build: {
     outDir: 'dist',
-    assetsDir: '',  // Assets in root to match base
-    emptyOutDir: true,  // Clear dist before build
-    manifest: true,  // Generate manifest for debugging (optional)
+    assetsDir: '',
+    emptyOutDir: true,
   },
   optimizeDeps: {
     exclude: ['lucid-react'],
