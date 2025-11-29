@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { MapPin, Phone, Clock, Facebook } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import { useLanguage } from '../LanguageContext';
 import SEO from '../components/SEO';
+
+emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '');
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -18,24 +21,20 @@ export default function Contact() {
     setStatus('loading');
 
     try {
-      // Send email directly
-      const emailApiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-feedback-email`;
+      const templateParams = {
+        to_email: 'peikinginseng@gmail.com',
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone || 'Not provided',
+        message: formData.message,
+        received_time: new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }),
+      };
 
-      const response = await fetch(emailApiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          message: formData.message,
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to send email');
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '',
+        templateParams
+      );
 
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', message: '' });
