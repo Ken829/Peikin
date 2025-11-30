@@ -22,6 +22,15 @@ export default function Contact() {
 
     try {
       const templateParams = {
+        to_email: formData.email,
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone || 'Not provided',
+        message: formData.message,
+        received_time: new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }),
+      };
+
+      const adminTemplateParams = {
         to_email: 'peikinginseng@gmail.com',
         from_name: formData.name,
         from_email: formData.email,
@@ -30,11 +39,18 @@ export default function Contact() {
         received_time: new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }),
       };
 
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '',
-        templateParams
-      );
+      await Promise.all([
+        emailjs.send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
+          import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '',
+          templateParams
+        ),
+        emailjs.send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
+          import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID || '',
+          adminTemplateParams
+        ),
+      ]);
 
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', message: '' });
