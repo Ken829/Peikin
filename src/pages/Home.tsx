@@ -80,11 +80,12 @@ export default function Home({ onNavigate }: HomeProps) {
             <div className="relative">
               <div className="relative rounded-2xl shadow-2xl overflow-hidden h-96 border-4 border-amber-800/30">
                 <img
-                  src="/zhongyibingfang.jpg"
+                  src="/zhongyibingfang.webp"
                   alt="Pei Kin Ginseng Hall - Traditional Chinese Medicine clinic interior in Kluang, Johor"
                   className="w-full h-full object-cover"
                   loading="eager"
                   fetchPriority="high"
+                  decoding="sync"
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-stone-900/75 via-amber-900/70 to-orange-900/75 flex items-center justify-center">
                   <div className="text-center text-white p-8 relative">

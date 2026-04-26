@@ -45,10 +45,12 @@ export default function Services() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           <div className="relative rounded-2xl overflow-hidden shadow-2xl h-80 border-4 border-stone-300/50 hover:scale-105 transition-transform">
             <img
-              src="/guasa.jpg"
+              src="/guasa.webp"
               alt="Gua Sha traditional Chinese medicine scraping therapy treatment"
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 to-transparent flex items-end p-6">
               <span className="text-white text-xl font-bold">刮痧 • Gua Sha</span>
@@ -59,7 +61,8 @@ export default function Services() {
               src="/tuina.jpg"
               alt="Tuina massage - traditional Chinese therapeutic massage technique"
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 to-transparent flex items-end p-6">
               <span className="text-white text-xl font-bold">推拿 • Tuina</span>
@@ -70,7 +73,8 @@ export default function Services() {
               src="/zhenjiu.webp"
               alt="Acupuncture needles - traditional Chinese medicine treatment at Pei Kin Ginseng Hall"
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 to-transparent flex items-end p-6">
               <span className="text-white text-xl font-bold">针灸 • Acupuncture</span>

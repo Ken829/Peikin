@@ -36,9 +36,11 @@ export default function Footer() {
           <div className="md:col-span-5">
             <div className="flex items-center space-x-3 mb-6">
               <img
-                src="/peikin_logo_refined_letters_smooth.png"
+                src="/peikin_logo_refined_letters_smooth.webp"
                 alt="Pei Kin Logo"
                 className="h-12 w-auto"
+                loading="lazy"
+                decoding="async"
               />
               <div>
                 <h3 className="text-2xl font-bold text-amber-200">

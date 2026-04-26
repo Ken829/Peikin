@@ -54,15 +54,17 @@ export default function About() {
                 alt="Traditional Chinese Medicine diagnosis and consultation at Pei Kin Ginseng Hall"
                 className="w-full h-full object-cover"
                 loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent"></div>
             </div>
             <div className="relative rounded-2xl overflow-hidden shadow-2xl h-72 border-4 border-stone-300/50">
               <img
-                src="/Herbs.jpg"
+                src="/Herbs.webp"
                 alt="Traditional Chinese medicinal herbs and natural remedies at Pei Kin Ginseng Hall"
                 className="w-full h-full object-cover"
                 loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent"></div>
             </div>
@@ -72,6 +74,7 @@ export default function About() {
                 alt="Traditional Chinese herbal medicine preparation and dispensing"
                 className="w-full h-full object-cover"
                 loading="lazy"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 to-transparent"></div>
             </div>

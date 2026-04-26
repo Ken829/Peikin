@@ -41,7 +41,7 @@ export default function Admin() {
         localStorage.setItem('notifications_enabled', 'true');
         new Notification('Notifications Enabled!', {
           body: 'You will now receive alerts for new feedback',
-          icon: '/peikin_logo_refined_letters_smooth.png',
+          icon: '/peikin_logo_refined_letters_smooth.webp',
         });
         return true;
       }
@@ -58,7 +58,7 @@ export default function Admin() {
     if (notificationsEnabled && Notification.permission === 'granted') {
       const notification = new Notification('New Customer Feedback!', {
         body: `${feedback.name}: ${feedback.message.substring(0, 100)}...`,
-        icon: '/peikin_logo_refined_letters_smooth.png',
+        icon: '/peikin_logo_refined_letters_smooth.webp',
         tag: feedback.id,
         requireInteraction: true,
       });

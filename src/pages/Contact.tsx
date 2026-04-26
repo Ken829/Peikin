@@ -100,10 +100,12 @@ export default function Contact() {
 
         <div className="relative rounded-2xl overflow-hidden shadow-2xl mb-12 h-80 border-4 border-stone-300/50">
           <img
-            src="/zhongyi.jpg"
+            src="/zhongyi.webp"
             alt="Contact Pei Kin Ginseng Hall - Traditional Chinese Medicine clinic in Kluang, Johor"
             className="w-full h-full object-cover"
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
+            decoding="sync"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-stone-900/80 via-amber-900/75 to-orange-900/70"></div>
         </div>

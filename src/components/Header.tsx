@@ -32,9 +32,10 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center space-x-4 cursor-pointer" onClick={() => onNavigate('home')}>
             <img
-              src="/peikin_logo_refined_letters_smooth.png"
+              src="/peikin_logo_refined_letters_smooth.webp"
               alt="Pei Kin Logo"
               className="h-14 w-auto"
+              fetchPriority="high"
             />
             <div className="text-3xl font-bold bg-gradient-to-r from-amber-800 to-orange-800 bg-clip-text text-transparent">
               {language === 'zh' ? '北京中医诊所' : language === 'ms' ? 'Pei Kin Ginseng Hall' : 'Pei Kin Ginseng Hall'}
