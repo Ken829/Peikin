@@ -44,35 +44,23 @@ export default function Services() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
           <div className="relative rounded-2xl overflow-hidden shadow-2xl h-80 border-4 border-stone-300/50 hover:scale-105 transition-transform">
-            <picture>
-              <source srcSet="/guasa.webp" type="image/webp" />
-              <img
-                src="/guasa.jpg"
-                alt="Gua Sha traditional Chinese medicine scraping therapy treatment"
-                className="w-full h-full object-cover"
-                loading="lazy"
-                decoding="async"
-                width={800}
-                height={320}
-              />
-            </picture>
+            <img
+              src="/guasa.jpg"
+              alt="Gua Sha traditional Chinese medicine scraping therapy treatment"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 to-transparent flex items-end p-6">
               <span className="text-white text-xl font-bold">刮痧 • Gua Sha</span>
             </div>
           </div>
           <div className="relative rounded-2xl overflow-hidden shadow-2xl h-80 border-4 border-stone-300/50 hover:scale-105 transition-transform">
-            <picture>
-              <source srcSet="/tuina.webp" type="image/webp" />
-              <img
-                src="/tuina.jpg"
-                alt="Tuina massage - traditional Chinese therapeutic massage technique"
-                className="w-full h-full object-cover"
-                loading="lazy"
-                decoding="async"
-                width={800}
-                height={320}
-              />
-            </picture>
+            <img
+              src="/tuina.jpg"
+              alt="Tuina massage - traditional Chinese therapeutic massage technique"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 to-transparent flex items-end p-6">
               <span className="text-white text-xl font-bold">推拿 • Tuina</span>
             </div>
@@ -83,9 +71,6 @@ export default function Services() {
               alt="Acupuncture needles - traditional Chinese medicine treatment at Pei Kin Ginseng Hall"
               className="w-full h-full object-cover"
               loading="lazy"
-              decoding="async"
-              width={800}
-              height={320}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-900/70 to-transparent flex items-end p-6">
               <span className="text-white text-xl font-bold">针灸 • Acupuncture</span>
