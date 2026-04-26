@@ -3,6 +3,7 @@ import { MapPin, Phone, Clock, Facebook } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import { useLanguage } from '../LanguageContext';
 import SEO from '../components/SEO';
+import { supabase } from '../lib/supabase';
 
 emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '');
 
@@ -21,36 +22,32 @@ export default function Contact() {
     setStatus('loading');
 
     try {
-      const templateParams = {
-        to_email: formData.email,
+      const { error: dbError } = await supabase.from('feedback').insert({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || null,
+        message: formData.message,
+      });
+
+      if (dbError) throw dbError;
+
+      const receivedTime = new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+      const baseParams = {
         from_name: formData.name,
         from_email: formData.email,
         phone: formData.phone || 'Not provided',
         message: formData.message,
-        received_time: new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }),
+        received_time: receivedTime,
       };
 
-      const adminTemplateParams = {
-        to_email: 'peikinginseng@gmail.com',
-        from_name: formData.name,
-        from_email: formData.email,
-        phone: formData.phone || 'Not provided',
-        message: formData.message,
-        received_time: new Date().toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }),
-      };
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
+      const adminTemplateId = import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID || '';
 
-      await Promise.all([
-        emailjs.send(
-          import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
-          import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '',
-          templateParams
-        ),
-        emailjs.send(
-          import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
-          import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID || '',
-          adminTemplateParams
-        ),
-      ]);
+      Promise.allSettled([
+        emailjs.send(serviceId, templateId, { ...baseParams, to_email: formData.email }),
+        emailjs.send(serviceId, adminTemplateId, { ...baseParams, to_email: 'peikinginseng@gmail.com' }),
+      ]).catch(() => {});
 
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', message: '' });
